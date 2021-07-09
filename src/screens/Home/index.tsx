@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FlatList, View, Text } from "react-native";
+import { Appointment } from "../../components/Appointment";
 import { ButtonAdd } from "../../components/ButtonAdd";
 import { CategorySelect } from "../../components/CategorySelect";
 import { ListHeader } from "../../components/ListHeader";
@@ -60,7 +61,9 @@ export function Home() {
           <FlatList
             data={appointments}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <Text>{item.guild.name}</Text>}
+            renderItem={({ item }) => <Appointment data={item} />}
+            style={styles.matches}
+            showsHorizontalScrollIndicator={false}
           />
         </View>
       </View>
