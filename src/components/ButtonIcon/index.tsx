@@ -15,7 +15,7 @@ export function ButtonIcon({ title, ...rest }: ButtonProps) {
       <View style={styles.iconWrapper}>
         <Image source={DiscordIcon} style={styles.icon} />
       </View>
-      <Text style={styles.title}>Entrar com Discord</Text>
+      <Text style={styles.title}>{title}</Text>
     </RectButton>
   );
 }
