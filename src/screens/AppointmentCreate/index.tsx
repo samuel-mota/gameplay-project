@@ -16,6 +16,7 @@ import { GuildIcon } from "../../components/GuildIcon";
 import { theme } from "../../global/styles/theme";
 import { styles } from "./styles";
 import { SmallInput } from "../../components/SmallInput";
+import { Button } from "../../components/Button";
 
 export function AppointmentCreate() {
   const [category, setCategory] = useState("");
@@ -98,6 +99,10 @@ export function AppointmentCreate() {
               numberOfLines={5}
               autoCorrect={false}
             />
+
+            <View style={styles.footer}>
+              <Button title="Agendar" />
+            </View>
           </View>
         </Background>
       </ScrollView>
