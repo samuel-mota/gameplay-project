@@ -15,7 +15,7 @@ export type GuildData = {
   owner: boolean;
 };
 
-type GuildProps = TouchableOpacityProps & {
+export type GuildProps = TouchableOpacityProps & {
   data: GuildData;
 };
 
