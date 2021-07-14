@@ -1,6 +1,5 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import * as AuthSession from "expo-auth-session";
-import * as Linking from "expo-linking";
 import {
   SCOPE,
   RESPONSE_TYPE,
@@ -21,11 +20,18 @@ type User = {
 
 type AuthContextData = {
   user: User;
+  loading: boolean;
   signIn: () => Promise<void>;
 };
 
 type AuthProviderProps = {
   children: ReactNode;
+};
+
+type AuthorizationResponse = AuthSession.AuthSessionResult & {
+  params: {
+    access_token: string;
+  };
 };
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -45,19 +51,35 @@ function AuthProvider({ children }: AuthProviderProps) {
 
       // console.log("AUTHURL ", authUrl);
 
-      const response = await AuthSession.startAsync({ authUrl });
+      const { type, params } = (await AuthSession.startAsync({
+        authUrl,
+      })) as AuthorizationResponse;
 
-      console.log("RESPONSE ", response);
+      if (type === "success") {
+        api.defaults.headers.authorization = `Bearer ${params.access_token}`;
 
-      const response2 = Linking.makeUrl(authUrl);
-      console.log("RESPONSE2 ", response2);
+        const userInfo = await api.get("/users/@me");
+
+        const firstName = userInfo.data.username.split(" ")[0];
+
+        userInfo.data.avatar = `${CDN_IMAGE}/avatars/${userInfo.data.id}/${userInfo.data.avatar}.png`;
+
+        setUser({
+          ...userInfo.data,
+          firstName,
+          token: params.access_token,
+        });
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
     } catch {
       throw new Error("Não foi possível autenticar");
     }
   }
 
   return (
-    <AuthContext.Provider value={{ user, signIn }}>
+    <AuthContext.Provider value={{ user, loading, signIn }}>
       {children}
     </AuthContext.Provider>
   );
