@@ -1,7 +1,15 @@
 import { Fontisto } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Alert, FlatList, ImageBackground, Text, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  ImageBackground,
+  Platform,
+  Share,
+  Text,
+  View,
+} from "react-native";
 import { BorderlessButton } from "react-native-gesture-handler";
 import { api } from "../../services/api";
 
@@ -52,6 +60,15 @@ export function AppointmentDetails() {
     }
   }
 
+  function handleShareInvitation() {
+    const message =
+      Platform.OS === "ios"
+        ? `Junte-se a ${guildSelected.guild.name}`
+        : widget.instant_invite;
+
+    Share.share({ message, url: widget.instant_invite });
+  }
+
   useEffect(() => {
     fetchGuildWidget();
   }, []);
@@ -76,9 +93,11 @@ export function AppointmentDetails() {
       <Header
         title="Detalhes"
         action={
-          <BorderlessButton>
-            <Fontisto name="share" size={24} color={theme.colors.primary} />
-          </BorderlessButton>
+          guildSelected.guild.owner && ( // mostrar o botao se a pessoa for a dona do canal, caso contrario pode dar erro
+            <BorderlessButton onPress={handleShareInvitation}>
+              <Fontisto name="share" size={24} color={theme.colors.primary} />
+            </BorderlessButton>
+          )
         }
       />
       <ImageBackground source={BannerImg} style={styles.banner}>
