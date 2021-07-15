@@ -1,12 +1,12 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import * as AuthSession from "expo-auth-session";
-import {
-  SCOPE,
-  RESPONSE_TYPE,
-  REDIRECT_URI,
-  CLIENT_ID,
-  CDN_IMAGE,
-} from "../configs";
+
+const { SCOPE } = process.env;
+const { RESPONSE_TYPE } = process.env;
+const { REDIRECT_URI } = process.env;
+const { CLIENT_ID } = process.env;
+const { CDN_IMAGE } = process.env;
+
 import { api } from "../services/api";
 
 type User = {
