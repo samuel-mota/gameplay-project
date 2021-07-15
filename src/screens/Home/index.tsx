@@ -56,8 +56,8 @@ export function Home() {
     categoryId === category ? setCategory("") : setCategory(categoryId); // para marcar e desmarcar
   }
 
-  function handleAppointmentDetails() {
-    navigation.navigate("AppointmentDetails");
+  function handleAppointmentDetails(guildSelected: AppointmentData) {
+    navigation.navigate("AppointmentDetails", { guildSelected });
   }
 
   function handleAppointmentCreate() {
@@ -101,7 +101,10 @@ export function Home() {
         <Load />
       ) : (
         <>
-          <ListHeader title="Partidas agendadas" subtitle="Total 6" />
+          <ListHeader
+            title="Partidas agendadas"
+            subtitle={`Total ${appointments.length}`}
+          />
 
           <FlatList
             data={appointments}
@@ -109,7 +112,10 @@ export function Home() {
             style={styles.matches}
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-              <Appointment data={item} onPress={handleAppointmentDetails} />
+              <Appointment
+                data={item}
+                onPress={() => handleAppointmentDetails(item)}
+              />
             )}
             ItemSeparatorComponent={() => <ListDivider />}
             contentContainerStyle={{ paddingBottom: 69 }}
